@@ -1,0 +1,24 @@
+name: Deploy MultiDocker
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t caihedoro/react-test -f ./client/Dockerfile.dev ./client
+      - run: docker run -e CI=true caihedoro/react-test npm test
+
+      - run: docker build -t caihedoro/multi-client ./client
+      - run: docker build -t caihedoro/multi-nginx ./nginx
+      - run: docker build -t caihedoro/multi-server ./server
+      - run: docker build -t caihedoro/multi-worker ./worker
+
+      - run: docker push caihedoro/multi-client
+      - run: docker push caihedoro/multi-nginx
+      - run: docker push caihedoro/multi-server
+      - run: docker push caihedoro/multi-worker
