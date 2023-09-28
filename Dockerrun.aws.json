@@ -1,5 +1,5 @@
 {
-	"AWSEBDockerrunVersion": 3,
+	"AWSEBDockerrunVersion": 1,
 	"containerDefinitions": [
 		{
 			"name": "client",
@@ -25,12 +25,10 @@
 			"name": "nginx",
 			"image": "caihedoro/multi-nginx",
 			"essential": true,
-			"portMappings": [
-				{
-					"hostPort": 80,
-					"containerPort": 80
-				}
-			],
+			"portMappings": [{
+				"hostPort": 80,
+				"containerPort": 80
+			}],
 			"links": ["client", "api"],
 			"memory": 128
 		}
